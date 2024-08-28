@@ -35,7 +35,7 @@ def parse_prj(
         elif passed_start and passed_end:
             post_strings.append(line)
 
-        if line.endswith("flow paths:\n"):
+        if "flow paths:" in line:
             passed_start = True
 
     raw_data = "\n".join(target_strings)
