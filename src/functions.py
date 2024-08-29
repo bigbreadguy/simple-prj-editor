@@ -38,13 +38,13 @@ def parse_prj(
         if "flow paths:" in line:
             passed_start = True
 
-    raw_data = "\n".join(target_strings)
+    raw_data = "".join(target_strings)
     data = pd.read_csv(io.StringIO(raw_data), names=columns, sep=r"\s+")
 
     return (
         data,
         column_names,
         target_strings,
-        "\n".join(pre_strings),
-        "\n".join(post_strings)
+        "".join(pre_strings),
+        "".join(post_strings)
     )
