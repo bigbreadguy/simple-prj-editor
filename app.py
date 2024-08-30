@@ -11,7 +11,8 @@ if prj_file is not None:
     edited_df = st.data_editor(df)
     target_string = edited_df.to_csv(header=False, index=False, sep="\t")
 
-    full_data = pre_target_data + col_name_string + target_string + post_target_data
+    full_string = pre_target_data + col_name_string + target_string + post_target_data
+    full_data = full_string.encode("CP949")
 
     st.download_button(
         label="Download edited data as prj file",
