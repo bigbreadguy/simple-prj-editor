@@ -7,15 +7,17 @@ from src.functions import parse_prj
 
 st.title("Simple ContamW project file editor")
 
-cwd = os.getcwd()
+data_dir = os.path.join("data")
+if not os.path.isdir(data_dir):
+    os.mkdir(data_dir)
 
 prj_file = st.file_uploader("Choose a .prj file", type=["prj"])
 if prj_file is not None:
     df, col_name_string, target_data, pre_target_data, post_target_data = parse_prj(prj_file)
 
-    edited_dfs, code = spreadsheet(
+    edited_dfs, code = spreadsheet( 
         df,
-        import_folder=os.path.join("data")
+        import_folder=data_dir
     )
 
     target_string = edited_dfs.popitem(last=False)[1].to_csv(header=False, index=False, sep="\t")
