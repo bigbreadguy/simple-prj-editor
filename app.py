@@ -13,15 +13,34 @@ if not os.path.isdir(data_dir):
 
 prj_file = st.file_uploader("Choose a .prj file", type=["prj"])
 if prj_file is not None:
-    flow_paths, flow_paths_col_name_string, header_data, footer_data = parse_prj(prj_file)
+    (
+        flow_paths,
+        flow_paths_col_name_string,
+        header_string,
+        flow_elements_string,
+        other_elements_string,
+        initial_zone_concentrations_string,
+        footer_string
+    ) = parse_prj(prj_file)
 
-    edited_dfs, code = spreadsheet( 
+    edited_dfs, code = spreadsheet(
         flow_paths,
         import_folder=data_dir
     )
 
-    flow_paths_string = edited_dfs.popitem(last=False)[1].to_csv(header=False, index=False, sep="\t")
-    full_string = header_data + flow_paths_col_name_string + flow_paths_string + footer_data
+    flow_paths_string = edited_dfs.popitem(
+        last=False
+    )[1].to_csv(header=False, index=False, sep="\t")
+    full_string = (
+            header_string
+            + flow_elements_string
+            + other_elements_string
+            # + zones_string
+            + initial_zone_concentrations_string
+            + flow_paths_col_name_string
+            + flow_paths_string
+            + footer_string
+    )
     full_data = full_string.encode("CP949")
 
     st.download_button(
@@ -30,4 +49,7 @@ if prj_file is not None:
         file_name=prj_file.name,
         mime="text/plain",
     )
-    st.write(":red[※ Only the data in the first sheet will be converted to prj file]")
+    st.write(
+        ":red[※ Only the data in the first sheet "
+        "will be converted to prj file]"
+    )

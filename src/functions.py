@@ -8,7 +8,7 @@ from streamlit.runtime.uploaded_file_manager import UploadedFile
 
 def parse_prj(
         prj_file: UploadedFile
-) -> tuple[DataFrame, str | None, str, str]:
+) -> tuple[DataFrame, str | None, str, str, str, str, str]:
     """
     :param prj_file: UploadedFile
     :return: parsed data
@@ -21,9 +21,11 @@ def parse_prj(
     passed_end_flow_paths = False
     header_data = []
     flow_elements_strings = []
+    other_elements_strings = []
     zones_column_names = None
     zones_columns = []
     zones_strings = []
+    initial_zone_concentrations_strings = []
     flow_paths_column_names = None
     flow_paths_columns = []
     flow_paths_strings = []
@@ -56,9 +58,22 @@ def parse_prj(
             passed_end_flow_paths = True
 
         # Parse data by section
-        if not passed_start_flow_paths:
+        if not passed_start_flow_elements:
             header_data.append(line)
-        elif passed_start_flow_paths and not passed_end_flow_paths:
+        if passed_start_flow_elements and not passed_end_flow_elements:
+            flow_elements_strings.append(line)
+        if passed_end_flow_elements and not passed_start_zones:
+            other_elements_strings.append(line)
+        if passed_start_zones and not passed_end_zones:
+            if line.startswith("!"):
+                zones_column_names = line
+                zones_columns = zones_column_names.split()
+                zones_columns.remove("!")
+            else:
+                zones_columns.append(line)
+        if passed_end_zones and not passed_start_flow_paths:
+            initial_zone_concentrations_strings.append(line)
+        if passed_start_flow_paths and not passed_end_flow_paths:
             if line.startswith("!"):
                 flow_paths_column_names = line
                 flow_paths_columns = flow_paths_column_names.split()
@@ -66,7 +81,7 @@ def parse_prj(
                 flow_paths_columns.extend(["Unnamed 0", "Unnamed 1"])
             else:
                 flow_paths_strings.append(line)
-        elif passed_start_flow_paths and passed_end_flow_paths:
+        if passed_end_flow_paths:
             footer_data.append(line)
 
         # Check start condition of each section
@@ -94,5 +109,8 @@ def parse_prj(
         data_flow_paths,
         flow_paths_column_names,
         "".join(header_data),
+        "".join(flow_elements_strings),
+        "".join(other_elements_strings),
+        "".join(initial_zone_concentrations_strings),
         "".join(footer_data)
     )
