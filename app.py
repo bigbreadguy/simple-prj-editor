@@ -29,6 +29,12 @@ if prj_file is not None:
     # Merge and display dataframes
     zones_target = zones[["Z#", "name"]]
 
+    flow_paths.rename(columns={
+        'e#': '경로 종류',
+        'relHt': '상대 높이',
+        'mult': '전체 면적'
+    }, inplace=True)
+
     merged_data = flow_paths.merge(
         zones_target, how="left", left_on="n#", right_on="Z#")
     merged_data.rename(columns={"name": "존 이름(from)"}, inplace=True)
