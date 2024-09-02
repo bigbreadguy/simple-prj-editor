@@ -8,7 +8,7 @@ from streamlit.runtime.uploaded_file_manager import UploadedFile
 
 def parse_prj(
         prj_file: UploadedFile
-) -> tuple[DataFrame, str | None, str, str, str, str, str]:
+) -> tuple[DataFrame, DataFrame, str | None, str, str, str, str, str]:
     """
     :param prj_file: UploadedFile
     :return: parsed data
@@ -105,8 +105,14 @@ def parse_prj(
     data_flow_paths = pd.read_csv(
         io.StringIO(raw_data_flow_paths), names=flow_paths_columns, sep=r"\s+")
 
+    raw_data_zones = "".join(zones_strings)
+    data_zones = pd.read_csv(
+        io.StringIO(raw_data_zones), names=zones_columns, sep=r"\s+"
+    )
+
     return (
         data_flow_paths,
+        data_zones,
         flow_paths_column_names,
         "".join(header_data),
         "".join(flow_elements_strings),
