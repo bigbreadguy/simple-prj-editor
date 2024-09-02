@@ -69,6 +69,11 @@ def parse_prj(
                 zones_column_names = line
                 zones_columns = zones_column_names.split()
                 zones_columns.remove("!")
+                zones_columns = list(
+                    filter(
+                        lambda s: '<' not in s and '>' not in s, zones_columns
+                    )
+                )
             else:
                 zones_columns.append(line)
         if passed_end_zones and not passed_start_flow_paths:
