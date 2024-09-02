@@ -44,6 +44,15 @@ if prj_file is not None:
     merged_data["존 이름(to)"] = merged_data.apply(
         lambda row: "외기" if row["m#"] == -1 else row["존 이름(to)"], axis=1)
 
+    columns = list(merged_data.columns)
+    n_index = columns.index("n#")
+    m_index = columns.index("m#")
+    new_columns = [col for col in columns if col not in ["존 이름(from)", "존 이름(to)"]]
+    new_columns.insert(n_index + 1, "존 이름(from)")
+    new_columns.insert(m_index + 2, "존 이름(to)")
+
+    merged_data = merged_data[new_columns]
+
     edited_dfs, code = spreadsheet(
         merged_data,
         import_folder=data_dir
