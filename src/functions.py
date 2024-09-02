@@ -8,7 +8,7 @@ from streamlit.runtime.uploaded_file_manager import UploadedFile
 
 def parse_flow_paths(
         prj_file: UploadedFile
-) -> tuple[DataFrame, str | None, list[str], str, str]:
+) -> tuple[DataFrame, str | None, str, str]:
     passed_start = False
     passed_end = False
     pre_strings = []
@@ -44,7 +44,6 @@ def parse_flow_paths(
     return (
         data,
         column_names,
-        target_strings,
         "".join(pre_strings),
         "".join(post_strings)
     )

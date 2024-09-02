@@ -13,10 +13,10 @@ if not os.path.isdir(data_dir):
 
 prj_file = st.file_uploader("Choose a .prj file", type=["prj"])
 if prj_file is not None:
-    df, col_name_string, target_data, pre_target_data, post_target_data = parse_flow_paths(prj_file)
+    flow_paths, col_name_string, pre_target_data, post_target_data = parse_flow_paths(prj_file)
 
     edited_dfs, code = spreadsheet( 
-        df,
+        flow_paths,
         import_folder=data_dir
     )
 
