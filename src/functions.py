@@ -6,7 +6,7 @@ from pandas import DataFrame
 from streamlit.runtime.uploaded_file_manager import UploadedFile
 
 
-def parse_prj(
+def parse_flow_paths(
         prj_file: UploadedFile
 ) -> tuple[DataFrame, str | None, list[str], str, str]:
     passed_start = False
