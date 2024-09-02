@@ -75,7 +75,7 @@ def parse_prj(
                     )
                 )
             else:
-                zones_columns.append(line)
+                zones_strings.append(line)
         if passed_end_zones and not passed_start_flow_paths:
             initial_zone_concentrations_strings.append(line)
         if passed_start_flow_paths and not passed_end_flow_paths:
