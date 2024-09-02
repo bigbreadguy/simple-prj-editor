@@ -3,7 +3,7 @@ import os
 from mitosheet.streamlit.v1 import spreadsheet
 import streamlit as st
 
-from src.functions import parse_flow_paths
+from src.functions import parse_prj
 
 st.title("Simple ContamW project file editor")
 
@@ -13,15 +13,15 @@ if not os.path.isdir(data_dir):
 
 prj_file = st.file_uploader("Choose a .prj file", type=["prj"])
 if prj_file is not None:
-    flow_paths, col_name_string, pre_target_data, post_target_data = parse_flow_paths(prj_file)
+    flow_paths, flow_paths_col_name_string, header_data, footer_data = parse_prj(prj_file)
 
     edited_dfs, code = spreadsheet( 
         flow_paths,
         import_folder=data_dir
     )
 
-    target_string = edited_dfs.popitem(last=False)[1].to_csv(header=False, index=False, sep="\t")
-    full_string = pre_target_data + col_name_string + target_string + post_target_data
+    flow_paths_string = edited_dfs.popitem(last=False)[1].to_csv(header=False, index=False, sep="\t")
+    full_string = header_data + flow_paths_col_name_string + flow_paths_string + footer_data
     full_data = full_string.encode("CP949")
 
     st.download_button(
