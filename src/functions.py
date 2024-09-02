@@ -8,7 +8,7 @@ from streamlit.runtime.uploaded_file_manager import UploadedFile
 
 def parse_prj(
         prj_file: UploadedFile
-) -> tuple[DataFrame, DataFrame, str | None, str, str, str, str, str]:
+) -> tuple[DataFrame, DataFrame, str | None, str | None, str, str, str, str, str]:
     """
     :param prj_file: UploadedFile
     :return: parsed data
@@ -113,6 +113,7 @@ def parse_prj(
     return (
         data_flow_paths,
         data_zones,
+        zones_column_names,
         flow_paths_column_names,
         "".join(header_data),
         "".join(flow_elements_strings),
@@ -120,3 +121,31 @@ def parse_prj(
         "".join(initial_zone_concentrations_strings),
         "".join(footer_data)
     )
+
+
+def join_data(
+        flow_paths: DataFrame,
+        zones: DataFrame,
+        zones_col_name_string: str,
+        flow_paths_col_name_string: str,
+        header_string: str,
+        flow_elements_string: str,
+        other_elements_string: str,
+        initial_zone_concentrations_string: str,
+        footer_string: str
+):
+    flow_paths_string = flow_paths.to_csv(header=False, index=False, sep="\t")
+    zones_string = zones.to_csv(header=False, index=False, sep="\t")
+    full_string = (
+            header_string
+            + flow_elements_string
+            + other_elements_string
+            + zones_col_name_string
+            + zones_string
+            + initial_zone_concentrations_string
+            + flow_paths_col_name_string
+            + flow_paths_string
+            + footer_string
+    )
+
+    return full_string.encode("CP949")
