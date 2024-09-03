@@ -63,6 +63,13 @@ if prj_file is not None:
         merged_data,
         import_folder=data_dir
     )
+
+    file_to_import = st.file_uploader("Choose a file(.csv or .xlsx) to import in MitoSheet", type=["csv", "xlsx"])
+    if file_to_import is not None:
+        file_to_import_dir = os.path.join(data_dir, file_to_import.name)
+        with open(file_to_import_dir, "wb") as f:
+            f.write(file_to_import.read())
+
     merged_data = edited_dfs.popitem(last=False)[1]
     flow_paths_edited = merged_data.drop(
         columns=["존 이름(from)", "존 이름(to)"], inplace=False)
