@@ -1,5 +1,5 @@
 import io
-from typing import Tuple, List
+from typing import Tuple, List, Dict
 
 import pandas as pd
 from pandas import DataFrame
@@ -8,7 +8,7 @@ from streamlit.runtime.uploaded_file_manager import UploadedFile
 
 def parse_prj(
         prj_file: UploadedFile
-) -> tuple[DataFrame, DataFrame, str | None, str | None, str, str, str, str, str]:
+) -> tuple[DataFrame, DataFrame, dict[int, str], str | None, str | None, str, str, str, str, str]:
     """
     :param prj_file: UploadedFile
     :return: parsed data
@@ -20,6 +20,7 @@ def parse_prj(
     passed_start_flow_paths = False
     passed_end_flow_paths = False
     header_data = []
+    flow_elements_dict = dict()
     flow_elements_strings = []
     other_elements_strings = []
     zones_column_names = None
@@ -62,6 +63,11 @@ def parse_prj(
             header_data.append(line)
         if passed_start_flow_elements and not passed_end_flow_elements:
             flow_elements_strings.append(line)
+            if line[0].isdigit():
+                elements = line.split()
+                key = int(elements[0])
+                value = elements[-1]
+                flow_elements_dict[key] = value
         if passed_end_flow_elements and not passed_start_zones:
             other_elements_strings.append(line)
         if passed_start_zones and not passed_end_zones:
@@ -118,6 +124,7 @@ def parse_prj(
     return (
         data_flow_paths,
         data_zones,
+        flow_elements_dict,
         zones_column_names,
         flow_paths_column_names,
         "".join(header_data),
