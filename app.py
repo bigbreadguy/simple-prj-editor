@@ -17,6 +17,7 @@ if prj_file is not None:
     (
         flow_paths,
         zones,
+        flow_elements,
         zones_col_name_string,
         flow_paths_col_name_string,
         header_string,
@@ -58,6 +59,9 @@ if prj_file is not None:
     new_columns.insert(m_index + 2, "존 이름(to)")
 
     merged_data = merged_data[new_columns]
+
+    st.write("**Flow elements cheat sheet**")
+    st.json(flow_elements)
 
     edited_dfs, code = spreadsheet(
         merged_data,
