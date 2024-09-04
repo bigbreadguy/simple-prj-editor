@@ -5,13 +5,13 @@ import streamlit as st
 
 from src.functions import parse_prj, join_data
 
-st.title("Simple ContamW project file editor")
+st.title("ContamW 프로젝트 파일 에디터")
 
 data_dir = os.path.join("data")
 if not os.path.isdir(data_dir):
     os.mkdir(data_dir)
 
-prj_file = st.file_uploader("Choose a .prj file", type=["prj"])
+prj_file = st.file_uploader(".prj 파일을 선택해 주세요.", type=["prj"])
 if prj_file is not None:
     # Parse data from the uploaded .prj file
     (
@@ -60,7 +60,7 @@ if prj_file is not None:
 
     merged_data = merged_data[new_columns]
 
-    st.write("**Flow elements cheat sheet**")
+    st.write("**경로 종류 보기**")
     st.json(flow_elements)
 
     edited_dfs, code = spreadsheet(
@@ -68,7 +68,7 @@ if prj_file is not None:
         import_folder=data_dir
     )
 
-    file_to_import = st.file_uploader("Choose a file(.csv or .xlsx) to import in MitoSheet", type=["csv", "xlsx"])
+    file_to_import = st.file_uploader("MitoSheet로 임포트 할 파일(.csv 또는 .xlsx)을 선택해 주세요.", type=["csv", "xlsx"])
     if file_to_import is not None:
         file_to_import_dir = os.path.join(data_dir, file_to_import.name)
         with open(file_to_import_dir, "wb") as f:
@@ -92,12 +92,11 @@ if prj_file is not None:
     )
 
     st.download_button(
-        label="Download edited data as prj file",
+        label="수정한 내용(.prj로 변환) 다운로드",
         data=full_data,
         file_name=prj_file.name,
         mime="text/plain",
     )
     st.write(
-        ":red[※ Only the data in the first sheet "
-        "will be converted to prj file]"
+        ":red[※ 첫 번째 시트의 데이터 만 .prj 파일로 변환 됩니다.]"
     )
