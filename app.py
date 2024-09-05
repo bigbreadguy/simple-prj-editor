@@ -68,7 +68,7 @@ if prj_file is not None:
         import_folder=data_dir
     )
 
-    file_to_import = st.file_uploader("MitoSheet로 임포트 할 파일(.csv 또는 .xlsx)을 선택해 주세요.", type=["csv", "xlsx"])
+    file_to_import = st.file_uploader(".prj 파일로 변환 할 파일(.csv 또는 .xlsx)을 선택해 주세요.", type=["csv", "xlsx"])
     if file_to_import is not None:
         file_to_import_dir = os.path.join(data_dir, file_to_import.name)
         with open(file_to_import_dir, "wb") as f:
