@@ -80,6 +80,10 @@ def parse_prj(
                         lambda s: "<" not in s and ">" not in s, zones_columns
                     )
                 )
+                if "u[4]" in zones_columns:
+                    u4_index = zones_columns.index("u[4]")
+                    zones_columns.remove("u[4]")
+                    zones_columns[u4_index:u4_index] = ["u0", "u1", "u2", "u3"]
             else:
                 zones_strings.append(line)
         if passed_end_zones and not passed_start_flow_paths:
