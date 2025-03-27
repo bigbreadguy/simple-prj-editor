@@ -77,7 +77,7 @@ def parse_prj(
                 zones_columns.remove("!")
                 zones_columns = list(
                     filter(
-                        lambda s: '<' not in s and '>' not in s, zones_columns
+                        lambda s: "<" not in s and ">" not in s, zones_columns
                     )
                 )
             else:
