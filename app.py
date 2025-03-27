@@ -28,7 +28,7 @@ if prj_file is not None:
     ) = parse_prj(prj_file)
 
     # Merge and display dataframes
-    zones_target = zones[["Z#", "name"]]
+    zones_dict = dict(zip(zones["Z#"], zones["name"]))
 
     flow_paths.rename(columns={
         "e#": "경로 종류",
@@ -37,20 +37,9 @@ if prj_file is not None:
         "relHt": "상대 높이",
     }, inplace=True)
 
-    merged_data = flow_paths.merge(
-        zones_target, how="left", left_on="n#", right_on="Z#")
-    merged_data.rename(columns={"name": "존 이름(from)"}, inplace=True)
-    merged_data.drop(columns=["Z#"], inplace=True)
-
-    merged_data = merged_data.merge(
-        zones_target, how="left", left_on="m#", right_on="Z#")
-    merged_data.rename(columns={"name": "존 이름(to)"}, inplace=True)
-    merged_data.drop(columns=["Z#"], inplace=True)
-
-    merged_data["존 이름(from)"] = merged_data.apply(
-        lambda row: "외기" if row["n#"] == -1 else row["존 이름(from)"], axis=1)
-    merged_data["존 이름(to)"] = merged_data.apply(
-        lambda row: "외기" if row["m#"] == -1 else row["존 이름(to)"], axis=1)
+    merged_data = flow_paths.copy()
+    merged_data["존 이름(from)"] = merged_data["n#"].map(lambda x: "외기" if x == -1 else zones_dict.get(x))
+    merged_data["존 이름(to)"] = merged_data["m#"].map(lambda x: "외기" if x == -1 else zones_dict.get(x))
 
     columns = list(merged_data.columns)
     n_index = columns.index("n#")
